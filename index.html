@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/Vue3.js"></script>
+    <title>Agenda Telefónica</title>
+</head>
+<body>
+    <header>
+        <h1>Agenda Telefónica</h1>
+    </header>
+    
+    <section id="seccion">
+        <fieldset>
+            <legend>Nuevo Contacto</legend>
+            Nombre: <input v-model="nuevoNombre" type="text" maxlength="30">
+            Teléfono: <input v-model="nuevoTelefono" type="text" maxlength="10">
+            Categoría: 
+            <select v-model="nuevaCategoria">
+                <option value="Comida">Comida</option>
+                <option value="Servicios">Servicios</option>
+                <option value="Trabajo">Trabajo</option>
+                <option value="Familia">Familia</option>
+            </select>
+            <button @click="agregarContacto">Agregar</button>
+        </fieldset>
+        
+        <article>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Teléfono</th>
+                        <th>Categoría</th>
+                        <th>Mensajes</th>
+                        <th>Llamadas</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(contacto, index) in contactos" :key="index">
+                        <td>{{ contacto.nombre }}</td>
+                        <td>{{ contacto.telefono }}</td>
+                        <td>{{ contacto.categoria }}</td>
+                        <td>
+                            <button @mousedown="iniciarIncrementoMensajes(index)" 
+                                    @mouseup="detenerIncrementoMensajes" 
+                                    @mouseleave="detenerIncrementoMensajes"
+                                    :disabled="contacto.mensajes >= 25">+</button>
+                            {{ contacto.mensajes }}
+                            <button @click="decrementarMensajes(index)" :disabled="contacto.mensajes <= 0">-</button>
+                        </td>
+                        <td>
+                            <button @mousedown="iniciarIncrementoLlamadas(index)" 
+                                    @mouseup="detenerIncrementoLlamadas" 
+                                    @mouseleave="detenerIncrementoLlamadas"
+                                    :disabled="contacto.llamadas >= 15">+</button>
+                            {{ contacto.llamadas }}
+                            <button @click="decrementarLlamadas(index)" :disabled="contacto.llamadas <= 0">-</button>
+                        </td>
+                        <td><button @click="eliminarContacto(index)">X</button></td>
+                    </tr>
+                </tbody>
+            </table>
+    
+            <!-- Fila para mostrar el total de contactos, mensajes y llamadas -->
+            <div style="margin-top: 10px; padding: 10px; text-align: center; background-color: #4a4a90; color: #dcdcdc; border-radius: 5px;">
+                <span>Contactos: {{ contactos.length }}</span> |
+                <span>Total de Mensajes: {{ totalMensajes }}</span> |
+                <span>Total de Llamadas: {{ totalLlamadas }}</span>
+            </div>
+        </article>
+    </section>    
+
+    <script src="js/script.js"></script>
+</body>
+</html>
